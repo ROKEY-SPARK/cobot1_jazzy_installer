@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CycloneDDS 설정 템플릿
+    렌더 주체 = resources/hostcfg.sh dds (협동2 설치기와 같은 템플릿)
+    치환 대상 = 아래 인터페이스 placeholder 줄
+    치환 값 = loopback + DDS_NETIF 로 명시 지정한 외부 NIC 목록
+    출력 = ${CYCLONEDDS_XML}, 머신 종속 산출물이라 레포 추적 제외
+    버퍼 = /etc/sysctl.d/60-cyclonedds.conf 와 세트 적용
+-->
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+  <Domain id="any">
+    <General>
+      <Interfaces>
+__DDS_INTERFACES__
+      </Interfaces>
+      <!-- loopback 의 SPDP discovery 동작 조건 = 멀티캐스트 허용 -->
+      <AllowMulticast>true</AllowMulticast>
+    </General>
+    <Internal>
+      <SocketReceiveBufferSize min="64MB"/>
+      <SocketSendBufferSize min="64MB"/>
+    </Internal>
+  </Domain>
+</CycloneDDS>
